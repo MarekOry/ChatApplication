@@ -46,13 +46,13 @@ func (r *chatRoom) run() {
 var upgrader = websocket.Upgrader{ReadBufferSize: 0, WriteBufferSize: 0}
 
 func (r *chatRoom) ServeHTTP(w http.ResponseWriter, req *http.Request) {
-	socket, err := upgrader.Upgrade(w, req, nil)
+	conn, err := upgrader.Upgrade(w, req, nil)
 	if err != nil {
 		log.Fatal("ServeHTTP:", err)
 		return
 	}
 	chatUser := &chatUser{
-		socket:  socket,
+		conn:    conn,
 		receive: make(chan []byte, upgrader.WriteBufferSize),
 
 		chatRoom: r,
